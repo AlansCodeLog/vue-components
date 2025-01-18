@@ -3,6 +3,8 @@
 export { useAccesibilityOutline } from "./useAccesibilityOutline.js"
 export { useAriaLabel } from "./useAriaLabel.js"
 export { useDarkMode } from "./useDarkMode.js"
+export { useInjectedDarkMode } from "./useInjectedDarkMode.js"
+export { useSetupDarkMode } from "./useSetupDarkMode.js"
 export { useDivideAttrs } from "./useDivideAttrs.js"
 export { useGlobalResizeObserver } from "./useGlobalResizeObserver.js"
 export { useScrollNearContainerEdges } from "./useScrollNearContainerEdges.js"
