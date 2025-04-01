@@ -10,27 +10,37 @@
 	ref="el"
 >
 	<!-- id root is useful for teleports, so they are at the topmost level where they can still be styled -->
+	<!-- See TestControls for why the margins here -->
 	<div
 		id="root"
-		v-bind="{ ...$attrs, class: undefined, wrapperAttrs: undefined }"
+		v-bind="{ ...$attrs.attrs, class: undefined, wrapperAttrs: undefined }"
 		:class="twMerge( `
 			min-w-dvw
 			dark:bg-fg
 			dark:text-bg
 			bg-bg
 			text-fg
+		`,
+			testWrapperMode && `
+			px-10
+			pb-10
+		`,
+			!testWrapperMode && `
+			min-h-dvh
 			flex
 			flex-col
-			items-center
-		`, ($attrs as any).attrs?.class)"
+		`,
+			($attrs as any).attrs?.class)"
 	>
+		<TestControls v-if="testWrapperMode" :show-outline="showOutline"/>
 		<slot/>
 	</div>
 </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, type PropType, ref } from "vue"
+import { type Theme } from "metamorphosis"
+import { computed, onBeforeUnmount, onMounted, ref, toRaw } from "vue"
 
 import { useAccesibilityOutline } from "../../composables/useAccesibilityOutline.js"
 import { useDivideAttrs } from "../../composables/useDivideAttrs.js"
@@ -38,6 +48,7 @@ import { useSetupDarkMode } from "../../composables/useSetupDarkMode.js"
 import { useShowDevOnlyKey } from "../../composables/useShowDevOnlyKey.js"
 import { theme } from "../../theme.js"
 import { twMerge } from "../../utils/twMerge.js"
+import TestControls from "../TestControls/TestControls.vue"
 
 const $attrs = useDivideAttrs(["wrapper"])
 
@@ -45,7 +56,9 @@ defineOptions({ name: "root" })
 const props = withDefaults(defineProps<{
 	outline?: boolean
 	forceOutline?: boolean
+	testWrapperMode?: boolean
 }>(), {
+	testWrapperMode: false,
 	outline: true,
 	forceOutline: false,
 })
