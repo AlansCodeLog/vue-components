@@ -39,25 +39,27 @@
 </template>
 
 <script setup lang="ts">
-import { type Theme } from "metamorphosis"
 import { computed, onBeforeUnmount, onMounted, ref, toRaw } from "vue"
 
 import { useAccesibilityOutline } from "../../composables/useAccesibilityOutline.js"
 import { useDivideAttrs } from "../../composables/useDivideAttrs.js"
 import { useSetupDarkMode } from "../../composables/useSetupDarkMode.js"
 import { useShowDevOnlyKey } from "../../composables/useShowDevOnlyKey.js"
-import { theme } from "../../theme.js"
+import { theme as defaultTheme } from "../../theme.js"
 import { twMerge } from "../../utils/twMerge.js"
+import {type Theme} from "metamorphosis"
 import TestControls from "../TestControls/TestControls.vue"
 
 const $attrs = useDivideAttrs(["wrapper"])
 
 defineOptions({ name: "root" })
 const props = withDefaults(defineProps<{
+	theme?: Theme
 	outline?: boolean
 	forceOutline?: boolean
 	testWrapperMode?: boolean
 }>(), {
+	theme: undefined,
 	testWrapperMode: false,
 	outline: true,
 	forceOutline: false,
@@ -70,16 +72,17 @@ const autoOutline = useAccesibilityOutline(el).outline
 
 const showOutline = computed(() => (props.outline && autoOutline.value) || props.forceOutline)
 
+const theme = computed(() => props.theme ?? defaultTheme)
 const themeCb = (): void => {
-	theme.attach(el.value!)
+	toRaw(theme.value).attach(el.value!)
 }
-if ((process as any).client) {
+if (import.meta.client) {
 	onMounted(() => {
-		theme.on("change", themeCb)
+		toRaw(theme.value).on("change", themeCb)
 		themeCb()
 	})
 	onBeforeUnmount(() => {
-		theme.off("change", themeCb)
+		toRaw(theme.value).off("change", themeCb)
 	})
 }
 
