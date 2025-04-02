@@ -46,12 +46,14 @@ export const Primary: Story = {
 		,
 
 		template: `
-			Press enter to add value.
+			Simple Input connected to multi-value.
+			Press enter to add value:
 			<lib-simple-input
 				v-model="inputValue"
 				@keydown="onKeydownEnter"
 			>
 			</lib-simple-input>
+			Multi-value component:
 			<lib-multi-values
 				ref="multiValueEl"
 				v-bind="args"
