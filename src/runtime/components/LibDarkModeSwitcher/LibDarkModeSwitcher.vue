@@ -80,11 +80,10 @@ onMounted(() => {
 export default {
 	name: "lib-dark-mode-switcher"
 }
-type RealProps =
- {
- 	/** The auto labels are shown by default. You can disable them by passing false or pass an object with your own labels. */
- 	autoLabel?: false | Record<"system" | "dark" | "light", string>
- }
+type RealProps = {
+	/** The auto labels are shown by default. You can disable them by passing false or pass an object with your own labels. */
+	autoLabel?: false | Record<"system" | "dark" | "light", string>
+}
 
 interface Props
 	extends
