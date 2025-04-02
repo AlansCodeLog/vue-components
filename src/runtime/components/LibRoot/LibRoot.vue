@@ -58,11 +58,14 @@ const props = withDefaults(defineProps<{
 	outline?: boolean
 	forceOutline?: boolean
 	testWrapperMode?: boolean
+	/** True by default, should be passed import.meta.client if using nuxt, or false when running server side. */
+	isClientSide?: boolean
 }>(), {
 	theme: undefined,
 	testWrapperMode: false,
 	outline: true,
 	forceOutline: false,
+	isClientSide: true
 })
 
 
@@ -76,7 +79,7 @@ const theme = computed(() => props.theme ?? defaultTheme)
 const themeCb = (): void => {
 	toRaw(theme.value).attach(el.value!)
 }
-if (import.meta.client) {
+if (props.isClientSide) {
 	onMounted(() => {
 		toRaw(theme.value).on("change", themeCb)
 		themeCb()
@@ -86,7 +89,7 @@ if (import.meta.client) {
 	})
 }
 
-const darkModeSetup = useSetupDarkMode()
+const darkModeSetup = useSetupDarkMode({ isClientSide: props.isClientSide })
 
 const darkMode = darkModeSetup.darkMode
 
